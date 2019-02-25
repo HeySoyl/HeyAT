@@ -1,23 +1,50 @@
 import Vapor
+import Fluent
+import Crypto
+import FluentMySQL
 
-/// Controls basic CRUD operations on `Todo`s.
-struct BusinessController {
-    /// Returns a list of all `Business`s.
-    func index(_ req: Request) throws -> Future<[Business]> {
-        return Business.query(on: req).all()
+class BusinessController: RouteCollection {
+    
+    //定义接口
+    func boot(router: Router) throws {
+        router.group("businesses"){
+            group in
+            group.post("select", use: self.select)
+            group.post("create", use: self.create)
+//            group.post("delete", use: self.delete)
+        }
     }
-
-    /// Saves a decoded `Business` to the database.
-    func create(_ req: Request) throws -> Future<Business> {
-        return try req.content.decode(Business.self).flatMap { business in
-            return business.save(on: req)
+    
+    /// 查询业务表信息
+    func select(_ req: Request) throws -> Future<Response>{
+        return try req.content.decode(Business.self).flatMap { forum in
+            
+            let forumID = forum.id
+            //不带有ID则查询全部数据
+            guard forumID != nil else {
+                return Business.query(on: req)
+                    .all()
+                    .encode(status: .created, for: req)
+            }
+            //带有ID则查询单条数据
+            return Business.query(on: req)
+                .filter(\.id == forumID)
+                .all()
+                .encode(status: .created, for: req)
         }
     }
 
-    /// Deletes a parameterized `Business`.
-    func delete(_ req: Request) throws -> Future<HTTPStatus> {
-        return try req.parameters.next(Business.self).flatMap { business in
-            return business.delete(on: req)
-        }.transform(to: .ok)
+    ///创建业务表信息
+    func create(_ req: Request) throws -> Future<Business> {
+        return try req.content.decode(Business.self).flatMap { forum in
+            return forum.save(on: req)
+        }
     }
+
+//    /// Deletes a parameterized `Business`.
+//    func delete(_ req: Request) throws -> Future<HTTPStatus> {
+//        return try req.parameters.next(Business.self).flatMap { business in
+//            return business.delete(on: req)
+//        }.transform(to: .ok)
+//    }
 }

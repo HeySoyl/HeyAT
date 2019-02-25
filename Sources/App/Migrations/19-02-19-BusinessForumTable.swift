@@ -16,8 +16,7 @@ extension Business: Migration {
             try addProperties(to: builder)
         }
     }
-    static func revert(
-        on connection: MySQLConnection) -> Future<Void> {
+    static func revert( on connection: MySQLConnection) -> Future<Void> {
         return Database.delete(Business.self, on: connection)
     }
 }
