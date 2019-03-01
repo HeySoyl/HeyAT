@@ -60,10 +60,12 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
     Business.defaultDatabase = .mysql
     var migrations = MigrationConfig()
     migrations.add(model: Business.self, database: .mysql)
+    migrations.add(model: Instance.self, database: .mysql)
     
     //开发环境填充测试数据
     if env == .development {
         migrations.add(migration: BusinessSeeder.self, database: .mysql)
+        migrations.add(migration: InstanceSeeder.self, database: .mysql)
     }
     services.register(migrations)
     

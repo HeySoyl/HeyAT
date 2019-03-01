@@ -11,7 +11,8 @@ class BusinessController: RouteCollection {
             group in
             group.post("select", use: self.select)
             group.post("create", use: self.create)
-//            group.post("delete", use: self.delete)
+            group.patch("update", use: self.create)
+            group.delete("delete", use: self.delete)
         }
     }
     
@@ -40,11 +41,19 @@ class BusinessController: RouteCollection {
             return forum.save(on: req)
         }
     }
+    
+    ///修改业务表信息
+    func update(_ req: Request) throws -> Future<Business> {
+        return try req.content.decode(Business.self).flatMap { forum in
+            let forumID = forum.id
+            return forum.update(on: req, originalID: forumID)
+        }
+    }
 
-//    /// Deletes a parameterized `Business`.
-//    func delete(_ req: Request) throws -> Future<HTTPStatus> {
-//        return try req.parameters.next(Business.self).flatMap { business in
-//            return business.delete(on: req)
-//        }.transform(to: .ok)
-//    }
+    /// Deletes a parameterized `Business`.
+    func delete(_ req: Request) throws -> Future<HTTPStatus> {
+        return try req.parameters.next(Business.self).flatMap { business in
+            return business.delete(on: req)
+        }.transform(to: .ok)
+    }
 }

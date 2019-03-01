@@ -1,5 +1,14 @@
-import FluentMySQL
+//
+//  Business.swift
+//  App
+//
+//  Created by Soyl on 2019/2/23.
+//
+
 import Vapor
+import Fluent
+import Foundation
+import FluentMySQL
 
 struct Business: Content, MySQLModel {
 
@@ -11,8 +20,8 @@ struct Business: Content, MySQLModel {
     init(id: Int?, name: String?, desc: String?, rediskey: String?) {
         self.id = id
         self.name = name
-        self.desc = name
-        self.rediskey = name
+        self.desc = desc
+        self.rediskey = rediskey
     }
 
     init(name: String?, desc: String?, rediskey: String?) {
