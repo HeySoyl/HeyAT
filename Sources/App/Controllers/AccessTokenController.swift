@@ -12,9 +12,10 @@ final class AccessTokenController {
     static let sharedInstance = AccessTokenController()
     
     //创建Token
-    func addToken(_ uid: Int, on connection: DatabaseConnectable) throws -> AccessToken {
+    func addToken(_ uid: Int, req: Request) throws -> AccessToken {
         let accessToken = try AccessToken(userID: uid)
-        _ = accessToken.save(on: connection)
+        print("\(accessToken)")
+        _ = accessToken.save(on: req)
         return accessToken
     }
     //返回userID
@@ -42,7 +43,7 @@ final class AccessTokenController {
             .flatMap({ exist in
                 
                 guard exist != nil else{
-                    return try ResponseJSON<Empty>(status: 1011, message: "token错误 没有找到这个用户").encode(for: req)
+                    return try ResponseJSON<Empty>(status: 1011, message: "Token错误 没有找到这个用户").encode(for: req)
                 }
                 return try UID(exist!.userID)
             })

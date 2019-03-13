@@ -39,7 +39,7 @@ class OAuthController: RouteCollection {
                     guard user != nil else {
                         let result = forum.save(on: req)
                         return result.flatMap({  content in
-                            let accessToken = try AccessTokenController.sharedInstance.addToken(content.id!, on: req)
+                            let accessToken = try AccessTokenController.sharedInstance.addToken(content.id!, req: req)
                             return try ResponseJSON<AccessToken>(status: 0, message: "注册成功", data: accessToken).encode(for: req)
                         })
                     }
@@ -85,9 +85,9 @@ class OAuthController: RouteCollection {
                 .flatMap({ user in
                     
                     guard user != nil else{
-                        return try ResponseJSON<Empty>(status: 1005, message: "token错误 没有找到这个用户").encode(for: req)
+                        return try ResponseJSON<Empty>(status: 1005, message: "Token错误 没有找到这个用户").encode(for: req)
                     }
-                    return try ResponseJSON<User>(status: 0, message: "验证成功🌹", data: user).encode(for: req)
+                    return try ResponseJSON<User>(status: 0, message: "Token验证成功", data: user).encode(for: req)
                 })
         })
     }
@@ -103,7 +103,7 @@ class OAuthController: RouteCollection {
                 .flatMap({ user in
                     
                     guard user != nil else{
-                        return try ResponseJSON<Empty>(status: 1005, message: "token错误 没有找到这个用户").encode(for: req)
+                        return try ResponseJSON<Empty>(status: 1005, message: "Token错误 没有找到这个用户").encode(for: req)
                     }
                     
                     //获取请求的数据
