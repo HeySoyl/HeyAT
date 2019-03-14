@@ -14,7 +14,7 @@ final class AccessToken: MySQLModel {
     var id: Int?
     
     private(set) var token: String
-    private(set) var userID: Int
+    private(set) var userID: User.ID
     let expiryTime: Date
     
     static let accessTokenExpirationInterval: TimeInterval = 60 * 60 * 24 * 30 // 1个月

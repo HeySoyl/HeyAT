@@ -7,7 +7,7 @@
 import Vapor
 import FluentMySQL
 
-struct User: Content, MySQLModel {
+final class User: Content, MySQLModel {
     
     var id: Int?
     var name: String?
@@ -22,11 +22,6 @@ struct User: Content, MySQLModel {
 //    }
 }
 
-//extension Instance {
-//    var business: Parent<Instance, Business> {
-//        return parent(\.businessID)
-//    }
-//}
 //// Allows `Todo` to be used as a dynamic migration.
 //extension Business: Migration { }
 

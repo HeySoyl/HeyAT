@@ -6,27 +6,30 @@
 //
 
 import Vapor
+import Fluent
 import FluentMySQL
 
-struct Instance: Content, MySQLModel {
+final class Instance: Content, MySQLModel {
     
     var id: Int?
     var name: String?
     var desc: String?
     var businessID: Int?
     var createdAt: Date?
-    
-    init(id: Int?, name: String?, desc: String?, businessID: Int?, createdAt: Date?) {
-        self.id = id
-        self.name = name
-        self.desc = desc
-        self.businessID = businessID
-        self.createdAt = Date()
-    }
-    
-    init(name: String?, desc: String?, businessID: Int?) {
-        self.init(id: nil, name: name, desc: desc, businessID: businessID, createdAt: nil)
-    }
+
+//    init(id: Int?, name: String?, desc: String?, businessID: Int, createdAt: Date?) {
+//        self.id = id
+//        self.name = name
+//        self.desc = desc
+//        self.businessID = businessID
+//        self.createdAt = Date()
+//        print("Model +++ \(Date())")
+//    }
+//
+//    init(name: String?, desc: String?, businessID: Int, createdAt: Date?) {
+//        print("Model +++ \(Date())")
+//        self.init(id: nil, name: name, desc: desc, businessID: businessID, createdAt: Date())
+//    }
     
 }
 
@@ -35,6 +38,7 @@ struct Instance: Content, MySQLModel {
 //        return parent(\.businessID)
 //    }
 //}
+
 //// Allows `Todo` to be used as a dynamic migration.
 //extension Business: Migration { }
 

@@ -67,7 +67,7 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
     //开发环境填充测试数据
     if env == .development {
         migrations.add(migration: BusinessSeeder.self, database: .mysql)
-        migrations.add(migration: InstanceSeeder.self, database: .mysql)
+//        migrations.add(migration: InstanceSeeder.self, database: .mysql)
     }
     services.register(migrations)
     

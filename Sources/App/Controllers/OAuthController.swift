@@ -6,9 +6,6 @@
 //
 
 import Vapor
-import Fluent
-import Crypto
-import FluentMySQL
 
 class OAuthController: RouteCollection {
     func boot(router: Router) throws {
@@ -72,12 +69,9 @@ class OAuthController: RouteCollection {
         })
     }
     
-    // MARK: 获取个人信息
     func getUserInfo(_ req: Request) throws -> Future<Response> {
         
-        /********   第二种👋token验证   Request->func(route)->func(getUID)->func(route)->func(getUID)->Response    *******/
         return try AccessTokenController.sharedInstance.getUserIDReview(req: req, UID: { (uid) -> (EventLoopFuture<Response>) in
-            // 查找
             return User
                 .query(on: req)
                 .filter(\.id, .equal, uid)
@@ -91,13 +85,12 @@ class OAuthController: RouteCollection {
                 })
         })
     }
-    // MARK: 设置个人信息
+    
     func setUserInfo(_ req:Request) throws -> Future<Response> {
         
         return try AccessTokenController.sharedInstance.getUserIDReview(req: req, UID: { (uid) -> (EventLoopFuture<Response>) in
-            // 查找
-            return User
-                .query(on: req)
+
+            return User.query(on: req)
                 .filter(\.id, .equal, uid)
                 .first()
                 .flatMap({ user in
@@ -106,18 +99,15 @@ class OAuthController: RouteCollection {
                         return try ResponseJSON<Empty>(status: 1005, message: "Token错误 没有找到这个用户").encode(for: req)
                     }
                     
-                    //获取请求的数据
                     return try req.content.decode(User.self).flatMap({ content in
                         
-//                        if content.email != nil  {
-//                            user?.email = content.email
-//                        }
-//                        if content.name != nil  {
-//                            user?.name = content.name
-//                        }
-//                        if content.headImage != nil  {
-//                            user?.headImage = content.headImage
-//                        }
+                        if content.email != nil  {
+                            user?.email = content.email
+                        }
+                        if content.name != nil  {
+                            user?.name = content.name
+                        }
+                        
                         return  user!.update(on: req).flatMap({ content in
                             
                             return try ResponseJSON<User>(status: 0, message: "设置成功", data:content).encode(for: req)
@@ -128,7 +118,7 @@ class OAuthController: RouteCollection {
                 })
         })
     }
-    // MARK: 退出登录
+    
     func exit(_ req:Request) throws -> Future<Response> {
         
         return try AccessTokenController.sharedInstance.exit(req)

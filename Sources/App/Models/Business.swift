@@ -23,7 +23,7 @@ struct Business: Content, MySQLModel {
     }
     
     init(name: String?, desc: String?, rediskey: String?) {
-        self.init(id: nil, name: name,desc: desc,rediskey: rediskey)
+        self.init(id: nil, name: name, desc: desc, rediskey: rediskey)
     }
     
 }
